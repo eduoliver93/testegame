@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍌 Banana Clicker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #f9d423, #ff4e50);
+      padding: 20px;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      max-width: 420px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    #tela-nome input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      outline: none;
+      text-align: center;
+    }
+
+    #tela-nome input:focus {
+      border-color: #f9d423;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      transition: transform 0.1s, filter 0.2s;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    #btn-iniciar {
+      width: 100%;
+      padding: 12px;
+      background: #ff4e50;
+      color: #fff;
+      font-size: 18px;
+    }
+
+    #btn-iniciar:hover {
+      filter: brightness(1.1);
+    }
+
+    #tela-jogo {
+      display: none;
+    }
+
+    #saudacao {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    #pontos {
+      font-size: 40px;
+      font-weight: bold;
+      color: #ff4e50;
+      margin-bottom: 15px;
+    }
+
+    #banana {
+      font-size: 120px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.1s;
+      line-height: 1;
+    }
+
+    #banana:hover {
+      transform: scale(1.1) rotate(-5deg);
+    }
+
+    #banana:active {
+      transform: scale(0.9);
+    }
+
+    .dica {
+      color: #888;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .pontos-flutuantes {
+      position: fixed;
+      font-size: 24px;
+      font-weight: bold;
+      color: #27ae60;
+      pointer-events: none;
+      animation: subir 0.8s ease-out forwards;
+    }
+
+    @keyframes subir {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-60px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Tela de início -->
+    <div id="tela-nome">
+      <h1>🍌 Banana Clicker</h1>
+      <p style="margin-bottom:15px; color:#666;">Digite seu nome para começar:</p>
+      <input type="text" id="input-nome" placeholder="Seu nome" maxlength="20">
+      <button id="btn-iniciar">Começar a Comer!</button>
+    </div>
+
+    <!-- Tela do jogo -->
+    <div id="tela-jogo">
+      <p id="saudacao"></p>
+      <div id="pontos">0</div>
+      <button id="banana" title="Clique para comer!">🍌</button>
+      <p class="dica">Clique na banana para ganhar pontos!</p>
+    </div>
+  </div>
+
+  <script>
+    const telaNome = document.getElementById('tela-nome');
+    const telaJogo = document.getElementById('tela-jogo');
+    const inputNome = document.getElementById('input-nome');
+    const btnIniciar = document.getElementById('btn-iniciar');
+    const saudacao = document.getElementById('saudacao');
+    const pontosEl = document.getElementById('pontos');
+    const banana = document.getElementById('banana');
+
+    let pontos = 0;
+    let nomeUsuario = '';
+
+    // Iniciar jogo
+    btnIniciar.addEventListener('click', iniciarJogo);
+    inputNome.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') iniciarJogo();
+    });
+
+    function iniciarJogo() {
+      const nome = inputNome.value.trim();
+      if (nome === '') {
+        alert('Por favor, digite um nome de usuário!');
+        return;
+      }
+      nomeUsuario = nome;
+      saudacao.textContent = `Jogador: ${nomeUsuario}`;
+      telaNome.style.display = 'none';
+      telaJogo.style.display = 'block';
+    }
+
+    // Clique na banana
+    banana.addEventListener('click', (e) => {
+      pontos++;
+      pontosEl.textContent = pontos;
+      mostrarPontoFlutuante(e);
+    });
+
+    function mostrarPontoFlutuante(e) {
+      const flutuante = document.createElement('div');
+      flutuante.classList.add('pontos-flutuantes');
+      flutuante.textContent = '+1';
+      flutuante.style.left = e.clientX + 'px';
+      flutuante.style.top = e.clientY + 'px';
+      document.body.appendChild(flutuante);
+      setTimeout(() => flutuante.remove(), 800);
+    }
+  </script>
+</body>
+</html>
